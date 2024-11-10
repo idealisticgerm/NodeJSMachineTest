@@ -1,0 +1,86 @@
+<div class="container mt-5">
+  <h2 class="text-center mb-5">Products</h2>
+
+  <!-- Form to create a new product -->
+  <div class="form-group mb-3 justify-content-center">
+    <h5>Add Product</h5>
+    <input [(ngModel)]="newProductName" placeholder="Enter product name" class="form-control mb-3" />
+
+    <h5>Select Category</h5>
+    <select [(ngModel)]="newCategoryId" class="form-control">
+      <option value="" disabled [ngClass]="{'text-muted': !newCategoryId}">Select a category</option>
+      <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+    </select>
+    
+    <button (click)="createProduct()" class="btn btn-primary mt-3">Create Product</button>
+  </div>
+
+  <!-- List of products in a table -->
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Product ID</th>
+        <th>Product Name</th>
+        <th>CategoryId</th>
+        <th>Category Name</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products">
+        <td>{{ product.productId }}</td>
+        <td>{{ product.productName }}</td>
+        <td>{{ product.categoryId }}</td>
+        <td>{{ product.categoryName }}</td>
+        <td>
+          <button (click)="selectProduct(product)" class="btn btn-info">Edit</button>
+          <button (click)="deleteProduct(product.productId)" class="btn btn-danger ms-2">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Pagination controls -->
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <button class="page-link" (click)="onPageChange(currentPage - 1)" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </button>
+      </li>
+      <li class="page-item" *ngFor="let page of [].constructor(pageCount); let i = index">
+        <button class="page-link" (click)="onPageChange(i + 1)">
+          {{ i + 1 }}
+        </button>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === pageCount">
+        <button class="page-link" (click)="onPageChange(currentPage + 1)" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Update Product Modal -->
+  <div *ngIf="isModalOpen" class="modal" tabindex="-1" aria-hidden="true" style="display:block; z-index: 1050;">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Update Product</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <input [(ngModel)]="selectedProduct.name" class="form-control mb-3" placeholder="Update product name" />
+            <select [(ngModel)]="selectedProduct.categoryId" class="form-control">
+              <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+          <button type="button" class="btn btn-success" (click)="updateProduct()">Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
