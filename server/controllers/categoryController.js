@@ -1,46 +1,46 @@
-import { db } from "../config/db.js";
+import * as categoryService from "../services/categoryService.js";
 
 export const getAllCategories = async (req, res) => {
   try {
-    const [rows] = await db.query("SELECT * FROM categories");
-    res.json(rows);
+    const categories = await categoryService.getAllCategories();
+    res.json(categories);
   } catch (error) {
-    console.log("Error in fetching categories",error);
+    console.log("Error in fetching categories", error);
     res.status(500).json({ error: "Failed to fetch categories" });
   }
 }
 
 export const createCategory = async (req, res) => {
-  const {name} = req.body;
-
+  const { name } = req.body;
   try {
-    await db.query("INSERT INTO categories (name) VALUES (?)", [name]);
+    await categoryService.createCategory(name);
     res.status(201).json({ message: "Category created successfully" });
   } catch (error) {
-    console.log("Error in creating category",error);
+    console.log("Error in creating category", error);
     res.status(500).json({ error: "Failed to create category" });
   }
 }
 
-export const deleteCategory = async (req, res) => {
-  const {id} = req.params;
+
+export const updateCategory = async (req, res) => {
+  const { id } = req.params;
+  const { name } = req.body;
   try {
-    await db.query("DELETE FROM categories WHERE id = ?", [id]);
-    res.status(200).json({ message: "Category deleted successfully" });
+    await categoryService.updateCategory(name, id);
+    res.status(200).json({ message: "Category updated successfully" });
   } catch (error) {
-    console.log("Error in deleting category",error);
-    res.status(500).json({ error: "Failed to delete category" });
+    console.log("Error in updating category", error);
+    res.status(500).json({ error: "Failed to update category" });
   }
 }
 
-export const updateCategory = async (req, res) => {
-  const {id} = req.params;
-  const {name} = req.body;
+export const deleteCategory = async (req, res) => {
+  const { id } = req.params;
   try {
-    await db.query("UPDATE categories SET name = ? WHERE id = ?", [name, id]);
-    res.status(200).json({ message: "Category updated successfully" });
+    await categoryService.deleteCategory(id);
+    res.status(200).json({ message: "Category deleted successfully" });
   } catch (error) {
-    console.log("Error in updating category",error);
-    res.status(500).json({ error: "Failed to update category" });
+    console.log("Error in deleting category", error);
+    res.status(500).json({ error: "Failed to delete category" });
   }
 }

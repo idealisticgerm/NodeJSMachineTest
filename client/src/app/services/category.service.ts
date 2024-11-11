@@ -11,7 +11,7 @@ interface Category {
   providedIn: 'root'
 })
 export class CategoryService {
-  private apiUrl = 'http://localhost:3000/api/categories';
+  private apiUrl = 'http://localhost:3000/api/v1/categories';
 
   constructor(private http: HttpClient) {}
 
@@ -20,14 +20,14 @@ export class CategoryService {
   }
 
   createCategory(name: string): Observable<Category> {
-    return this.http.post<Category>(`${this.apiUrl}/create`, { name });
+    return this.http.post<Category>(`${this.apiUrl}/`, { name });
   }
 
   updateCategory(id: number, name: string): Observable<Category> {
-    return this.http.put<Category>(`${this.apiUrl}/update/${id}`, { name });
+    return this.http.put<Category>(`${this.apiUrl}/${id}`, { name });
   }
 
   deleteCategory(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/delete/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

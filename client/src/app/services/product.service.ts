@@ -13,7 +13,7 @@ interface Product {
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'http://localhost:3000/api/products';
+  private apiUrl = 'http://localhost:3000/api/v1/products';
 
   constructor(private http: HttpClient) {}
 
@@ -23,14 +23,14 @@ export class ProductService {
   }
 
   createProduct(name: string, categoryId: number): Observable<Product> {
-    return this.http.post<Product>(`${this.apiUrl}/create`, { name, categoryId });
+    return this.http.post<Product>(`${this.apiUrl}`, { name, categoryId });
   }
 
   updateProduct(id: number, name: string, categoryId: number): Observable<Product> {
-    return this.http.put<Product>(`${this.apiUrl}/update/${id}`, { name, categoryId });
+    return this.http.put<Product>(`${this.apiUrl}/${id}`, { name, categoryId });
   }
 
   deleteProduct(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/delete/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }
